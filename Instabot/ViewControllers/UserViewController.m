@@ -15,19 +15,11 @@
 
 @implementation UserViewController
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    _loginResponse = [GlobalVariables getInstagramUserInfo];
-    self.title = _loginResponse.user.username;
-    [self startRefreshing:_loginResponse];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setTableViewRefreshing];
-    [self setUserInfo];
-    [self.collectionView registerNib:[UINib nibWithNibName:@"FeedCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"Cell"];
+    self.loginResponse = [GlobalVariables getInstagramUserInfo];
+    self.title = self.loginResponse.user.username;
+    [self startRefreshing:self.loginResponse];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,9 +29,9 @@
 
 - (void)startRefreshing:(InstagramLoginResponse *)response
 {
-    _loginResponse = response;
+    self.loginResponse = response;
     __weak typeof(self) weakSelf = self;
-    _items = [NSMutableArray new];
+    self.items = [NSMutableArray new];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     [parameters setValue:[NSString stringWithFormat:@"%@", response.accessToken] forKey:@"access_token"];
@@ -48,7 +40,7 @@
         NSLog(@"JSON: %@", responseObject);
         NSDictionary* jsonData = responseObject;
         
-        _pagination = [[Pagination alloc]initWithDict:[jsonData valueForKey:@"pagination"]];
+        self.pagination = [[Pagination alloc]initWithDict:[jsonData valueForKey:@"pagination"]];
         for (NSDictionary *info in [jsonData valueForKey:@"data"]) {
             UserDataModule *user =  [[UserDataModule alloc] initWithDict:info];
             [weakSelf.items addObject:user];
@@ -65,10 +57,10 @@
 {
     __weak typeof(self) weakSelf = self;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:_pagination.next_url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:self.pagination.next_url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         NSDictionary* jsonData = responseObject;
-        _pagination = [[Pagination alloc]initWithDict:[jsonData valueForKey:@"pagination"]];
+        self.pagination = [[Pagination alloc]initWithDict:[jsonData valueForKey:@"pagination"]];
         for (NSDictionary *info in [jsonData valueForKey:@"data"]) {
             UserDataModule *user =  [[UserDataModule alloc] initWithDict:info];
             [weakSelf.items addObject:user];
@@ -79,50 +71,6 @@
         NSLog(@"Error: %@", error);
         [self.collectionView.footer endRefreshing];
     }];
-}
-
-- (void)setTableViewRefreshing
-{
-    [self.collectionView addLegendHeaderWithRefreshingBlock:^{
-        if (_loginResponse.accessToken) {
-            [self.collectionView.header beginRefreshing];
-            [self startRefreshing:_loginResponse];
-        }
-    }];
-    
-    [self.collectionView addLegendFooterWithRefreshingBlock:^{
-        if (_loginResponse.accessToken) {
-            [self.collectionView.footer beginRefreshing];
-            [self loadingMore:_loginResponse];
-        }
-    }];
-}
-
-- (void)setUserInfo
-{
-    [self.userImage sd_setImageWithURL:_loginResponse.user.profilePictureURL placeholderImage:nil];
-}
-
-#pragma CollectionView Delegate
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return _items.count;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString * const reuseIdentifier = @"Cell";
-    FeedCollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    if (_items && _items.count > 0) {
-        [cell updateCollectionCellWith:_items[indexPath.row]];
-    }
-    return cell;
-}
-
-#pragma DelegateFlowLayout
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(172, 172);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {

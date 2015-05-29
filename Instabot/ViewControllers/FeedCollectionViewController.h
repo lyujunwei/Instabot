@@ -10,6 +10,4 @@
 
 @interface FeedCollectionViewController : RequestCollectionViewController
 
-@property (nonatomic, strong) NSMutableArray *items;
-
 @end
