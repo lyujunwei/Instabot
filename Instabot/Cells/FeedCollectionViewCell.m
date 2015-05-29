@@ -14,4 +14,14 @@
     // Initialization code
 }
 
+- (void)updateCollectionCellWith:(UserDataModule *)userData
+{
+    [_FeedImageView sd_setImageWithURL:[NSURL URLWithString:userData.images.url]];
+}
+
++ (CGFloat)getCollectionCellHeight
+{
+    return 172;
+}
+
 @end

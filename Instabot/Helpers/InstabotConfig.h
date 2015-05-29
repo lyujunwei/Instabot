@@ -9,7 +9,7 @@
 #ifndef Instabot_InstabotConfig_h
 #define Instabot_InstabotConfig_h
 
-#define InstagramAuthURL    @"https://api.instagram.com"
+#define InstagramAPI    @"https://api.instagram.com"
 
 #define CLIENT_ID           @"3ca82e5ac4164471a7a5b4a5fc95a477"
 #define CLIENT_SECRET       @"160383b030654449bf44ff457e31cfb4"
@@ -24,7 +24,7 @@
 
 #pragma API
 
-#define USER_FEED           @"https://api.instagram.com/v1/users/self/feed?"
-#define USER_RECENT         @"https://api.instagram.com/v1/users/"
+#define USER_FEED           @"/v1/users/self/feed?"
+#define USER_RECENT         @"/v1/users/"
 
 #endif

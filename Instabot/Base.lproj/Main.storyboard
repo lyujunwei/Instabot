@@ -30,7 +30,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="pmV-DE-4xz">
-                            <size key="itemSize" width="50" height="50"/>
+                            <size key="itemSize" width="145" height="145"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -133,9 +133,35 @@
                     <view key="view" contentMode="scaleToFill" id="LoA-LI-rFS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="H0O-l4-0kc">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="cWX-Xp-6Zg">
+                                    <size key="itemSize" width="145" height="145"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="tAo-GY-IDe" id="9Tn-Be-Aia"/>
+                                    <outlet property="delegate" destination="tAo-GY-IDe" id="J0H-K7-08B"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="H0O-l4-0kc" firstAttribute="top" secondItem="LoA-LI-rFS" secondAttribute="top" id="7iV-Jb-o3s"/>
+                            <constraint firstAttribute="trailing" secondItem="H0O-l4-0kc" secondAttribute="trailing" id="IGh-Qf-b1h"/>
+                            <constraint firstItem="H0O-l4-0kc" firstAttribute="leading" secondItem="LoA-LI-rFS" secondAttribute="leading" id="eOV-Hf-g0v"/>
+                            <constraint firstAttribute="bottom" secondItem="H0O-l4-0kc" secondAttribute="bottom" id="ufG-I3-bDa"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="TQv-9z-Ipy"/>
+                    <connections>
+                        <outlet property="collectionView" destination="H0O-l4-0kc" id="7JX-dj-B01"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wKK-Nj-ujP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

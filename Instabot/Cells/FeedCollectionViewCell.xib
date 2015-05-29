@@ -6,13 +6,28 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="FeedCollectionViewCell">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="gTV-IL-0wX" customClass="FeedCollectionViewCell">
             <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Ah-XU-T6K">
+                        <rect key="frame" x="5" y="5" width="190" height="190"/>
+                    </imageView>
+                </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="1Ah-XU-T6K" secondAttribute="trailing" constant="5" id="2QI-Vi-I3Y"/>
+                <constraint firstAttribute="bottom" secondItem="1Ah-XU-T6K" secondAttribute="bottom" constant="5" id="OWO-Ax-yDP"/>
+                <constraint firstItem="1Ah-XU-T6K" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="SQ0-uj-ZXG"/>
+                <constraint firstItem="1Ah-XU-T6K" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="Scn-i6-6l2"/>
+            </constraints>
+            <connections>
+                <outlet property="FeedImageView" destination="1Ah-XU-T6K" id="qMj-ZI-KcH"/>
+            </connections>
+            <point key="canvasLocation" x="247" y="178"/>
         </collectionViewCell>
     </objects>
 </document>

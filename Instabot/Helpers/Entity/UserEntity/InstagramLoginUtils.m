@@ -66,7 +66,7 @@ NSString *const InstagramScopePermissionsParam = @"&scope=";
 {
     NSMutableString *instagramLoginURLString = [[NSMutableString alloc] init];
     [instagramLoginURLString appendString:[NSString stringWithFormat:@"%@%@%@%@%@%@",
-                                           InstagramAuthURL,
+                                           InstagramAPI,
                                            InstagramAuthClientIDEndpoint,
                                            self.clientID,
                                            InstagramAuthRedirectParams,

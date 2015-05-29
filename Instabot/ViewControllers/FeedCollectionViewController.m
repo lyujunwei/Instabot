@@ -7,6 +7,7 @@
 //
 
 #import "FeedCollectionViewController.h"
+#import "FeedCollectionViewCell.h"
 
 @interface FeedCollectionViewController ()
 
@@ -23,8 +24,10 @@ static NSString * const reuseIdentifier = @"Cell";
         [self needLoginBtnPressed];
     }
     
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"FeedCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"Cell"];
     
+    _loginResponse = [GlobalVariables getInstagramUserInfo];
+    [self startRefreshing:_loginResponse];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,7 +43,7 @@ static NSString * const reuseIdentifier = @"Cell";
                                                                              completion:^(InstagramLoginResponse *response, NSError *error) {
                                                                                  if (response.accessToken) {
                                                                                      [GlobalVariables saveUserInfo:response];
-                                                                                     //                                                                                     [self startRefreshing:response];
+                                                                                     [self startRefreshing:response];
                                                                                      [viewController dismissViewControllerAnimated:YES completion:nil];
                                                                                  }
                                                                              }];
@@ -58,7 +61,7 @@ static NSString * const reuseIdentifier = @"Cell";
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     [parameters setValue:[NSString stringWithFormat:@"%@", response.accessToken] forKey:@"access_token"];
     
-    [manager GET:[NSString stringWithFormat:@"%@%@/media/recent/?",USER_RECENT,response.user.userID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:[NSString stringWithFormat:@"%@%@",InstagramAPI,USER_FEED] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         NSDictionary* jsonData = responseObject;
         
@@ -67,6 +70,7 @@ static NSString * const reuseIdentifier = @"Cell";
             UserDataModule *user =  [[UserDataModule alloc] initWithDict:info];
             [weakSelf.items addObject:user];
         }
+        [self.collectionView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -91,52 +95,21 @@ static NSString * const reuseIdentifier = @"Cell";
 
 #pragma mark <UICollectionViewDataSource>
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 0;
-}
-
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 0;
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _items.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell
-    
+    static NSString * const reuseIdentifier = @"Cell";
+    FeedCollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    [cell updateCollectionCellWith:_items[indexPath.row]];
     return cell;
 }
 
-#pragma mark <UICollectionViewDelegate>
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(172, 172);
 }
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 @end

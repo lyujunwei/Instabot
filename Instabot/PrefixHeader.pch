@@ -23,5 +23,6 @@
 #import "UserDataModule.h"
 #import "GlobalVariables.h"
 #import "LoginViewController.h"
+#import "UIImageView+WebCache.h"
 
 #endif

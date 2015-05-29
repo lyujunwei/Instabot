@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserViewController : UIViewController
+@interface UserViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 
+@property (nonatomic, strong) NSMutableArray *items;
 @property (nonatomic, strong) InstagramLoginResponse *loginResponse;
+@property (nonatomic, strong) Pagination *pagination;
+
+@property (nonatomic,weak) IBOutlet UICollectionView *collectionView;
 
 @end

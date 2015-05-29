@@ -39,7 +39,7 @@ NSString *const CodeKey = @"code";
         self.clientID = clientID;
         self.clientSecret = clientSecret;
         self.callbackURL = callbackURL;
-        self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:InstagramAuthURL]];
+        self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:InstagramAPI]];
         self.sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
     }
     return self;

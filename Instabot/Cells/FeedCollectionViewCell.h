@@ -10,4 +10,10 @@
 
 @interface FeedCollectionViewCell : UICollectionViewCell
 
+@property (nonatomic, weak) IBOutlet UIImageView *FeedImageView;
+
+- (void)updateCollectionCellWith:(UserDataModule *)userData;
+
++ (CGFloat)getCollectionCellHeight;
+
 @end
