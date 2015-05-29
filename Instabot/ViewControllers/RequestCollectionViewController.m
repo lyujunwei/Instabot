@@ -1,33 +1,27 @@
 //
-//  UserViewController.m
+//  RequestCollectionViewController.m
 //  Instabot
 //
 //  Created by Junwei Lyu on 15/5/29.
 //  Copyright (c) 2015年 Junwei Lyu. All rights reserved.
 //
 
-#import "UserViewController.h"
+#import "RequestCollectionViewController.h"
 #import "FeedCollectionViewCell.h"
 
-@interface UserViewController ()
+@interface RequestCollectionViewController ()
 
 @end
 
-@implementation UserViewController
+@implementation RequestCollectionViewController
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    _loginResponse = [GlobalVariables getInstagramUserInfo];
-    self.title = _loginResponse.user.username;
-    [self startRefreshing:_loginResponse];
-}
+static NSString * const reuseIdentifier = @"Cell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     [self setTableViewRefreshing];
-    [self setUserInfo];
-    [self.collectionView registerNib:[UINib nibWithNibName:@"FeedCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"Cell"];
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,13 +32,14 @@
 - (void)startRefreshing:(InstagramLoginResponse *)response
 {
     _loginResponse = response;
-    __weak typeof(self) weakSelf = self;
     _items = [NSMutableArray new];
+    __weak typeof(self) weakSelf = self;
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     [parameters setValue:[NSString stringWithFormat:@"%@", response.accessToken] forKey:@"access_token"];
     
-    [manager GET:[NSString stringWithFormat:@"%@%@%@/media/recent/?",InstagramAPI,USER_RECENT,response.user.userID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:[NSString stringWithFormat:@"%@%@",InstagramAPI,USER_FEED] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         NSDictionary* jsonData = responseObject;
         
@@ -98,19 +93,25 @@
     }];
 }
 
-- (void)setUserInfo
-{
-    [self.userImage sd_setImageWithURL:_loginResponse.user.profilePictureURL placeholderImage:nil];
-}
+/*
+#pragma mark - Navigation
 
-#pragma CollectionView Delegate
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+#pragma mark <UICollectionViewDataSource>
+#pragma mark <UICollectionViewDataSource>
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return _items.count;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     static NSString * const reuseIdentifier = @"Cell";
     FeedCollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     if (_items && _items.count > 0) {
@@ -119,15 +120,9 @@
     return cell;
 }
 
-#pragma DelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return CGSizeMake(172, 172);
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    NSLog(@"index.section -> %ld , index.row -> %ld",indexPath.section,(long)indexPath.row);
 }
 
 @end

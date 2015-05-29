@@ -24,5 +24,6 @@
 #import "GlobalVariables.h"
 #import "LoginViewController.h"
 #import "UIImageView+WebCache.h"
+#import "RequestCollectionViewController.h"
 
 #endif
