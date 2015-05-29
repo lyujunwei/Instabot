@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  RequestTableViewController.h
 //  Instabot
 //
 //  Created by Junwei Lyu on 15/5/29.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface RequestTableViewController : UITableViewController
 
 @end
-

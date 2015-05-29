@@ -1,5 +1,5 @@
 //
-//  AppDelegate.h
+//  UserViewController.h
 //  Instabot
 //
 //  Created by Junwei Lyu on 15/5/29.
@@ -8,9 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (strong, nonatomic) UIWindow *window;
+@interface UserViewController : UIViewController
 
 @end
-
