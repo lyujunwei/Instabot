@@ -24,6 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setTableViewRefreshing];
     [self.collectionView registerNib:[UINib nibWithNibName:@"FeedCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"Cell"];
 }
 
@@ -35,10 +36,8 @@
 - (void)startRefreshing:(InstagramLoginResponse *)response
 {
     _loginResponse = response;
-    _items = [NSMutableArray new];
-    self.title = response.user.username;
     __weak typeof(self) weakSelf = self;
-    
+    _items = [NSMutableArray new];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     [parameters setValue:[NSString stringWithFormat:@"%@", response.accessToken] forKey:@"access_token"];
@@ -53,8 +52,10 @@
             [weakSelf.items addObject:user];
         }
         [self.collectionView reloadData];
+        [self.collectionView.header endRefreshing];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [self.collectionView.header endRefreshing];
     }];
 }
 
@@ -71,8 +72,27 @@
             [weakSelf.items addObject:user];
         }
         [self.collectionView reloadData];
+        [self.collectionView.footer endRefreshing];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [self.collectionView.footer endRefreshing];
+    }];
+}
+
+- (void)setTableViewRefreshing
+{
+    [self.collectionView addLegendHeaderWithRefreshingBlock:^{
+        if (_loginResponse.accessToken) {
+            [self.collectionView.header beginRefreshing];
+            [self startRefreshing:_loginResponse];
+        }
+    }];
+    
+    [self.collectionView addLegendFooterWithRefreshingBlock:^{
+        if (_loginResponse.accessToken) {
+            [self.collectionView.footer beginRefreshing];
+            [self loadingMore:_loginResponse];
+        }
     }];
 }
 
@@ -86,7 +106,9 @@
 {
     static NSString * const reuseIdentifier = @"Cell";
     FeedCollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    [cell updateCollectionCellWith:_items[indexPath.row]];
+    if (_items && _items.count > 0) {
+        [cell updateCollectionCellWith:_items[indexPath.row]];
+    }
     return cell;
 }
 

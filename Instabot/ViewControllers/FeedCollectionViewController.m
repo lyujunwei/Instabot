@@ -25,9 +25,9 @@ static NSString * const reuseIdentifier = @"Cell";
     }
     
     [self.collectionView registerNib:[UINib nibWithNibName:@"FeedCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"Cell"];
-    
     _loginResponse = [GlobalVariables getInstagramUserInfo];
     [self startRefreshing:_loginResponse];
+    [self setTableViewRefreshing];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,7 +54,6 @@ static NSString * const reuseIdentifier = @"Cell";
 {
     _loginResponse = response;
     _items = [NSMutableArray new];
-    self.title = response.user.username;
     __weak typeof(self) weakSelf = self;
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -71,8 +70,10 @@ static NSString * const reuseIdentifier = @"Cell";
             [weakSelf.items addObject:user];
         }
         [self.collectionView reloadData];
+        [self.collectionView.header endRefreshing];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [self.collectionView.header endRefreshing];
     }];
 }
 
@@ -88,8 +89,28 @@ static NSString * const reuseIdentifier = @"Cell";
             UserDataModule *user =  [[UserDataModule alloc] initWithDict:info];
             [weakSelf.items addObject:user];
         }
+        [self.collectionView reloadData];
+        [self.collectionView.footer endRefreshing];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [self.collectionView.footer endRefreshing];
+    }];
+}
+
+- (void)setTableViewRefreshing
+{
+    [self.collectionView addLegendHeaderWithRefreshingBlock:^{
+        if (_loginResponse.accessToken) {
+            [self.collectionView.header beginRefreshing];
+            [self startRefreshing:_loginResponse];
+        }
+    }];
+    
+    [self.collectionView addLegendFooterWithRefreshingBlock:^{
+        if (_loginResponse.accessToken) {
+            [self.collectionView.footer beginRefreshing];
+            [self loadingMore:_loginResponse];
+        }
     }];
 }
 
@@ -103,7 +124,9 @@ static NSString * const reuseIdentifier = @"Cell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     static NSString * const reuseIdentifier = @"Cell";
     FeedCollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    [cell updateCollectionCellWith:_items[indexPath.row]];
+    if (_items && _items.count > 0) {
+        [cell updateCollectionCellWith:_items[indexPath.row]];
+    }
     return cell;
 }
 
