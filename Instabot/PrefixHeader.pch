@@ -17,5 +17,11 @@
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <MJRefresh/MJRefresh.h>
+#import <AFNetworking/AFNetworking.h>
 #import "InstabotConfig.h"
+#import "UserDataModule.h"
+#import "GlobalVariables.h"
+#import "LoginViewController.h"
+
 #endif

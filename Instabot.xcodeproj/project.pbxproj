@@ -26,6 +26,8 @@
 		E4616FB21B18440A000CF6F9 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4616FB01B18440A000CF6F9 /* LoginViewController.xib */; };
 		E4616FB51B1844E6000CF6F9 /* GlobalVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = E4616FB41B1844E6000CF6F9 /* GlobalVariables.m */; };
 		E4616FB91B184666000CF6F9 /* FeedCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4616FB81B184666000CF6F9 /* FeedCollectionViewController.m */; };
+		E4616FBD1B184958000CF6F9 /* FeedCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E4616FBB1B184958000CF6F9 /* FeedCollectionViewCell.m */; };
+		E4616FBE1B184958000CF6F9 /* FeedCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4616FBC1B184958000CF6F9 /* FeedCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +80,9 @@
 		E4616FB61B184565000CF6F9 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		E4616FB71B184666000CF6F9 /* FeedCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCollectionViewController.h; sourceTree = "<group>"; };
 		E4616FB81B184666000CF6F9 /* FeedCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedCollectionViewController.m; sourceTree = "<group>"; };
+		E4616FBA1B184958000CF6F9 /* FeedCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCollectionViewCell.h; sourceTree = "<group>"; };
+		E4616FBB1B184958000CF6F9 /* FeedCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedCollectionViewCell.m; sourceTree = "<group>"; };
+		E4616FBC1B184958000CF6F9 /* FeedCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedCollectionViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +205,9 @@
 		E4616F8F1B183C70000CF6F9 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				E4616FBA1B184958000CF6F9 /* FeedCollectionViewCell.h */,
+				E4616FBB1B184958000CF6F9 /* FeedCollectionViewCell.m */,
+				E4616FBC1B184958000CF6F9 /* FeedCollectionViewCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -341,6 +349,7 @@
 				E4616FB21B18440A000CF6F9 /* LoginViewController.xib in Resources */,
 				E4616F741B183C25000CF6F9 /* Main.storyboard in Resources */,
 				E4616F791B183C25000CF6F9 /* LaunchScreen.xib in Resources */,
+				E4616FBE1B184958000CF6F9 /* FeedCollectionViewCell.xib in Resources */,
 				E4616F761B183C25000CF6F9 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,6 +411,7 @@
 				E4616FB51B1844E6000CF6F9 /* GlobalVariables.m in Sources */,
 				E4616FA91B184372000CF6F9 /* InstagramLoginManager.m in Sources */,
 				E4616FB11B18440A000CF6F9 /* LoginViewController.m in Sources */,
+				E4616FBD1B184958000CF6F9 /* FeedCollectionViewCell.m in Sources */,
 				E4616FA71B184372000CF6F9 /* InstagramUser.m in Sources */,
 				E4616F6B1B183C25000CF6F9 /* main.m in Sources */,
 				E4616F961B1840DE000CF6F9 /* RequestTableViewController.m in Sources */,

@@ -1,5 +1,5 @@
 //
-//  UserViewController.h
+//  FeedCollectionViewCell.h
 //  Instabot
 //
 //  Created by Junwei Lyu on 15/5/29.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserViewController : UIViewController
-
-@property (nonatomic, strong) InstagramLoginResponse *loginResponse;
+@interface FeedCollectionViewCell : UICollectionViewCell
 
 @end

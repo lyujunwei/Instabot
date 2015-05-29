@@ -23,13 +23,8 @@ static NSString * const reuseIdentifier = @"Cell";
         [self needLoginBtnPressed];
     }
     
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Register cell classes
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,16 +47,56 @@ static NSString * const reuseIdentifier = @"Cell";
     [self presentViewController:viewController animated:YES completion:nil];
 }
 
+- (void)startRefreshing:(InstagramLoginResponse *)response
+{
+    _loginResponse = response;
+    _items = [NSMutableArray new];
+    self.title = response.user.username;
+    __weak typeof(self) weakSelf = self;
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setValue:[NSString stringWithFormat:@"%@", response.accessToken] forKey:@"access_token"];
+    
+    [manager GET:[NSString stringWithFormat:@"%@%@/media/recent/?",USER_RECENT,response.user.userID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        NSDictionary* jsonData = responseObject;
+        
+        _pagination = [[Pagination alloc]initWithDict:[jsonData valueForKey:@"pagination"]];
+        for (NSDictionary *info in [jsonData valueForKey:@"data"]) {
+            UserDataModule *user =  [[UserDataModule alloc] initWithDict:info];
+            [weakSelf.items addObject:user];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+- (void)loadingMore:(InstagramLoginResponse *)response
+{
+    __weak typeof(self) weakSelf = self;
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:_pagination.next_url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        NSDictionary* jsonData = responseObject;
+        _pagination = [[Pagination alloc]initWithDict:[jsonData valueForKey:@"pagination"]];
+        for (NSDictionary *info in [jsonData valueForKey:@"data"]) {
+            UserDataModule *user =  [[UserDataModule alloc] initWithDict:info];
+            [weakSelf.items addObject:user];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-#warning Incomplete method implementation -- Return the number of sections
     return 0;
 }
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-#warning Incomplete method implementation -- Return the number of items in the section
     return 0;
 }
 

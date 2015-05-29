@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GlobalVariables.h"
-#import "LoginViewController.h"
 
 @interface FeedCollectionViewController : UICollectionViewController
+
+@property (nonatomic, strong) NSMutableArray *items;
+@property (nonatomic, strong) InstagramLoginResponse *loginResponse;
+@property (nonatomic, strong) Pagination *pagination;
 
 @end
